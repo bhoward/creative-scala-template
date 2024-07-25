@@ -18,8 +18,8 @@ This is a template project designed for people using the Doodle library from [Cr
       2. Search for Command Prompt.
       3. Click that to open it. 
       4. Go to this directory: `cd <path to>/creative-scala-template` Replace `<path to>` with your directory path.
-3. Type `sbt run` and skip to step 7 (steps 4 through 6 do the same thing as this). Or, continue to step 4.
-4. Run `./sbt.sh` (OS X and Linux) or `sbt.bat` (Windows) to start SBT.
+3. Run `sbt` (if you already have SBT installed), `./sbt.sh` (OS X and Linux) or `sbt.bat` (Windows) to start SBT.
+4. Type `run` in SBT and continue with step 7, or go to step 5 if you want to explore in a console.
 5. Type `console` in SBT.
 6. Type `Example.image.draw()`.
 7. You should see a pop-up window containing a picture of three nested circles. If so, everything is working well.
