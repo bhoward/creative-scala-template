@@ -5,6 +5,7 @@ console / initialCommands := """
       |import doodle.image.*
       |import doodle.image.syntax.all.*
       |import doodle.image.syntax.core.*
+      |import doodle.core.font.*
       |import doodle.java2d.*
       |import cats.effect.unsafe.implicits.global
     """.trim.stripMargin

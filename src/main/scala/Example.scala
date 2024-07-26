@@ -2,6 +2,7 @@ import doodle.core.*
 import doodle.image.*
 import doodle.image.syntax.all.*
 import doodle.image.syntax.core.*
+import doodle.core.font.*
 import doodle.java2d.*
 import doodle.reactor.*
 import scala.concurrent.duration.*
