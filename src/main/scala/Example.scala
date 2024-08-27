@@ -66,6 +66,28 @@ object Example {
 
   val image4 = digitFlower(34567, 200)
 
+  def fibRect(num: Int): Image = {
+    def aux(num: Int): (Image, Double, Double) = {
+      val c = Color.hsl(num.turns / 9, 1, 0.5)
+      num match
+        case 0 => (Image.square(1).fillColor(c), 1, 1)
+        case n =>
+          val (r, w, h) = aux(n - 1)
+          val w2 = w / 2
+          val combined = r.rotate(90.degrees).size(h, w) `beside` (
+            Image.path(OpenPath.empty
+              .moveTo(-w2, w2)
+              .curveTo(0, w2, w2, 0, w2, -w2)) `on`
+            Image.square(w).fillColor(c))
+          (combined, h + w, w)
+    }
+
+    val (result, _, _) = aux(num)
+    result
+  }
+
+  val image5 = fibRect(14)
+
   val animation =
     Reactor
       .init(0.degrees)
@@ -84,10 +106,11 @@ object Example {
   val frame = Frame.default.withSize(600, 600).withCenterAtOrigin
 
   @main def go(): Unit = {
-    // image1.draw()
+    image1.draw()
     // image2.draw()
     // image3.draw()
-    image4.draw()
+    // image4.draw()
+    // image5.draw()
 
     // Comment out the above and uncomment the below to display the animation
     // animation.run(frame)
