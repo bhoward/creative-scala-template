@@ -105,13 +105,39 @@ object Example {
 
   val frame = Frame.default.withSize(600, 600).withCenterAtOrigin
 
+  val minhLe = {
+    val base = 300
+    def outer(dis: Int): Image = {
+      dis match
+        case -1 => Image.empty
+        case n =>  
+          val col = if(n%2==0) Color.lightBlue else Color.darkRed
+          Image.circle(n*40 + base).originAt(Landmark.percent(50, 85)).fillColor(col).strokeColor(col) `under` outer(n-1)
+    }
+    def inner(dis: Int): Image = {
+      dis match
+        case 0 => Image.empty
+        case n =>  
+          val col =
+          if(n%2==0) Color.lightBlue
+          else Color.darkRed
+          Image.circle(base-n*30).originAt(Landmark.percent(-50,-85)).fillColor(col).strokeColor(col) `on` inner(n-1)
+    }
+    def illusion(dis: Int): Image = {
+      outer(dis) `under` inner(dis).originAt(Landmark.percent(65,93))
+    }
+    illusion(7);
+  }
+
   @main def go(): Unit = {
-    image1.draw()
+    // image1.draw()
     // image2.draw()
     // image3.draw()
     // image4.draw()
     // image5.draw()
 
+    minhLe.draw()
+    
     // Comment out the above and uncomment the below to display the animation
     // animation.run(frame)
   }
