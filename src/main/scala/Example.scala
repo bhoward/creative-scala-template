@@ -129,6 +129,21 @@ object Example {
     illusion(7);
   }
 
+  val grantHunt = {
+    def tanjiro(num: Int): Image = {
+    num match
+        case 0 => Image.triangle(num*10,num*10).fillColor(Color.rgb(0,255,0))
+        case n => tanjiro(n-1)
+        `on` Image.triangle(num*8,num*8).fillColor(Color.rgb(255,215-num,0)).rotate((90-num).degrees) // yellow
+        `on` Image.triangle(num*8,num*8).fillColor(Color.rgb(0,0,num*2)).rotate((90-num*1.25).degrees) // blue
+        `on` Image.triangle(num*8,num*8).fillColor(Color.rgb(num*2,0,0)).rotate((90-num*1.5).degrees) // red
+        `on` Image.triangle(num*8,num*8).fillColor(Color.rgb(0,num*num-num*3,num*2)).rotate((90-num*1.75).degrees) // green
+    }
+
+    tanjiro(80)
+  }
+
+
   @main def go(): Unit = {
     // image1.draw()
     // image2.draw()
@@ -136,8 +151,9 @@ object Example {
     // image4.draw()
     // image5.draw()
 
-    minhLe.draw()
-    
+    // minhLe.draw()
+    grantHunt.draw()
+
     // Comment out the above and uncomment the below to display the animation
     // animation.run(frame)
   }
