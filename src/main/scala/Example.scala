@@ -143,6 +143,22 @@ object Example {
     tanjiro(80)
   }
 
+  val spencerVonbank = {
+    val gap = Image.rectangle(3, 3).noFill.noStroke
+    def diamonds(count: Int): Image = {
+      count match
+        case 0 => Image.rectangle(3, 3).strokeColor(Color.paleVioletRed)
+        case n =>
+          val unit = diamonds(n-1)
+          unit above
+          (unit `beside` gap `beside` unit)
+            `above` (unit)      
+    }
+
+    val fourofdiamonds = diamonds(4)
+    val card = Image.rectangle(150, 350).noFill.strokeColor(Color.blue)
+    fourofdiamonds.on(card)
+  }
 
   @main def go(): Unit = {
     // image1.draw()
@@ -152,7 +168,8 @@ object Example {
     // image5.draw()
 
     // minhLe.draw()
-    grantHunt.draw()
+    // grantHunt.draw()
+    spencerVonbank.draw()
 
     // Comment out the above and uncomment the below to display the animation
     // animation.run(frame)
