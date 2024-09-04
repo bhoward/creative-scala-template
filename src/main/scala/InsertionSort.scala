@@ -2,10 +2,8 @@ def insert(nums: List[Int], n: Int): List[Int] = {
   nums match
     case Nil => List(n)
     case head :: tail =>
-      if n < head then
+      if n <= head then
         n :: nums
-      else if n == head then
-        nums
       else
         head :: insert(tail, n)
 }
