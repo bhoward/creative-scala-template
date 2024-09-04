@@ -105,71 +105,12 @@ object Example {
 
   val frame = Frame.default.withSize(600, 600).withCenterAtOrigin
 
-  val minhLe = {
-    val base = 300
-    def outer(dis: Int): Image = {
-      dis match
-        case -1 => Image.empty
-        case n =>  
-          val col = if(n%2==0) Color.lightBlue else Color.darkRed
-          Image.circle(n*40 + base).originAt(Landmark.percent(50, 85)).fillColor(col).strokeColor(col) `under` outer(n-1)
-    }
-    def inner(dis: Int): Image = {
-      dis match
-        case 0 => Image.empty
-        case n =>  
-          val col =
-          if(n%2==0) Color.lightBlue
-          else Color.darkRed
-          Image.circle(base-n*30).originAt(Landmark.percent(-50,-85)).fillColor(col).strokeColor(col) `on` inner(n-1)
-    }
-    def illusion(dis: Int): Image = {
-      outer(dis) `under` inner(dis).originAt(Landmark.percent(65,93))
-    }
-    illusion(7);
-  }
-
-  val grantHunt = {
-    def tanjiro(num: Int): Image = {
-    num match
-        case 0 => Image.triangle(num*10,num*10).fillColor(Color.rgb(0,255,0))
-        case n => tanjiro(n-1)
-        `on` Image.triangle(num*8,num*8).fillColor(Color.rgb(255,215-num,0)).rotate((90-num).degrees) // yellow
-        `on` Image.triangle(num*8,num*8).fillColor(Color.rgb(0,0,num*2)).rotate((90-num*1.25).degrees) // blue
-        `on` Image.triangle(num*8,num*8).fillColor(Color.rgb(num*2,0,0)).rotate((90-num*1.5).degrees) // red
-        `on` Image.triangle(num*8,num*8).fillColor(Color.rgb(0,num*num-num*3,num*2)).rotate((90-num*1.75).degrees) // green
-    }
-
-    tanjiro(80)
-  }
-
-  val spencerVonbank = {
-    val gap = Image.rectangle(3, 3).noFill.noStroke
-    def diamonds(count: Int): Image = {
-      count match
-        case 0 => Image.rectangle(3, 3).strokeColor(Color.paleVioletRed)
-        case n =>
-          val unit = diamonds(n-1)
-          unit above
-          (unit `beside` gap `beside` unit)
-            `above` (unit)      
-    }
-
-    val fourofdiamonds = diamonds(4)
-    val card = Image.rectangle(150, 350).noFill.strokeColor(Color.blue)
-    fourofdiamonds.on(card)
-  }
-
   @main def go(): Unit = {
-    // image1.draw()
+    image1.draw()
     // image2.draw()
     // image3.draw()
     // image4.draw()
     // image5.draw()
-
-    // minhLe.draw()
-    // grantHunt.draw()
-    spencerVonbank.draw()
 
     // Comment out the above and uncomment the below to display the animation
     // animation.run(frame)
