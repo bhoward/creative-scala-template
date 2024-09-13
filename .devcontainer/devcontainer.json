@@ -14,6 +14,13 @@
 		"6080": {
 		"label": "desktop"
 		}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"scalameta.metals"
+			]
+		}
 	}
 
 	// Use 'postCreateCommand' to run commands after the container is created.
