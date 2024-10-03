@@ -79,11 +79,11 @@ def maxSubarray4(a: Vector[Double]): Double = {
     maxSoFar
 }
 
-def time[T](body: => T): (Long, T) = {
-    val start = System.currentTimeMillis()
+def time[T](body: => T): (Double, T) = {
+    val start = System.nanoTime()
     val result = body
-    val stop = System.currentTimeMillis()
-    (stop - start, result)
+    val stop = System.nanoTime()
+    ((stop - start) / 1e9, result)
 }
 
 @main def msa(n: Int): Unit = {
