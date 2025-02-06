@@ -1,38 +1,66 @@
 package graphs
 
+trait Edge[T]:
+  def from: T
+  def to: T
+  def weight: Double = 1
+
+object Edge:
+  case class Unweighted[T](from: T, to: T) extends Edge[T]
+  case class Weighted[T](from: T, to: T, _weight: Double) extends Edge[T]:
+    override def weight: Double = _weight
+
 trait Graph[T]:
   def nodes: List[T]
-  def pairs: List[(T, T)]
-  def neighbors(node: T): List[T]
-  def adjacent(node1: T, node2: T): Boolean
+  def edges: List[Edge[T]]
+  def pairs: List[(T, T)] = edges.map(e => (e.from, e.to))
+  def outgoing(node: T): List[Edge[T]] = edges.filter(_.from == node)
+  def incoming(node: T): List[Edge[T]] = edges.filter(_.to == node)
+  def neighbors(node: T): List[T] = outgoing(node).map(_.to)
+
+  // Need to override at least one of these:
+  def adjacent(node1: T, node2: T): Boolean = weight(node1, node2) < Double.PositiveInfinity
+  def weight(node1: T, node2: T): Double = if adjacent(node1, node2) then 1 else Double.PositiveInfinity
+
+  def asEdges = Graph.Edges(nodes, edges)
   def asPairs = Graph.Pairs(nodes, pairs)
   def asAdjList = Graph.AdjList(nodes, neighbors)
   def asAdjMatrix = Graph.AdjMatrix(nodes, adjacent)
+  def asWeighted = Graph.Weighted(nodes, weight)
+  // TODO add asOutList and asInList?
 
 object Graph:
-  case class Pairs[T](nodes: List[T], pairs: List[(T, T)]) extends Graph[T]:
-    def neighbors(node: T): List[T] = {
-      for
-        (node1, node2) <- pairs
-        if node1 == node
-      yield node2
+  case class Edges[T](nodes: List[T], edges: List[Edge[T]]) extends Graph[T]:
+    override def weight(node1: T, node2: T): Double = {
+      edges.find(e => e.from == node1 && e.to == node2) match
+        case None => Double.PositiveInfinity
+        case Some(edge) => edge.weight
     }
 
-    def adjacent(node1: T, node2: T): Boolean = pairs.contains(node1 -> node2)
+  case class Pairs[T](nodes: List[T], _pairs: List[(T, T)]) extends Graph[T]:
+    override def pairs: List[(T, T)] = _pairs
+
+    def edges: List[Edge[T]] = pairs.map {
+      case (from, to) => Edge.Unweighted(from, to)
+    }
+
+    override def adjacent(node1: T, node2: T): Boolean = pairs.contains(node1 -> node2)
 
     override def toString: String = pairs.mkString("{", ",", "}")
 
   case class AdjList[T](nodes: List[T], adj: T => List[T]) extends Graph[T]:
-    def pairs: List[(T, T)] = {
+    def edges: List[Edge[T]] = {
       for
         node1 <- nodes
         node2 <- adj(node1)
-      yield (node1, node2)
+      yield Edge.Unweighted(node1, node2)
     }
     
-    def neighbors(node: T): List[T] = adj(node)
+    override def outgoing(node: T): List[Edge[T]] = neighbors(node).map(Edge.Unweighted(node, _))
+
+    override def neighbors(node: T): List[T] = adj(node)
     
-    def adjacent(node1: T, node2: T): Boolean = adj(node1).contains(node2)
+    override def adjacent(node1: T, node2: T): Boolean = adj(node1).contains(node2)
 
     override def toString: String =
       nodes
@@ -40,28 +68,69 @@ object Graph:
         .mkString("[", "; ", "]")
 
   case class AdjMatrix[T](nodes: List[T], matrix: (T, T) => Boolean) extends Graph[T]:
-    def pairs: List[(T, T)] = {
+    def edges: List[Edge[T]] = {
       for
         node1 <- nodes
         node2 <- nodes
         if matrix(node1, node2)
-      yield (node1, node2)
+      yield Edge.Unweighted(node1, node2)
     }
     
-    def neighbors(node: T): List[T] = {
+    override def outgoing(node: T): List[Edge[T]] = {
+      for
+        node2 <- nodes
+        if matrix(node, node2)
+      yield Edge.Unweighted(node, node2)
+    }
+
+    override def incoming(node: T): List[Edge[T]] = {
+      for
+        node1 <- nodes
+        if matrix(node1, node)
+      yield Edge.Unweighted(node1, node)
+    }
+    
+    override def neighbors(node: T): List[T] = {
       for
         node2 <- nodes
         if matrix(node, node2)
       yield node2
     }
     
-    def adjacent(node1: T, node2: T): Boolean = matrix(node1, node2)
+    override def adjacent(node1: T, node2: T): Boolean = matrix(node1, node2)
 
     override def toString: String =
       nodes
         .map(n1 => s"$n1:${nodes.map(n2 => matrix(n1, n2).compare(false)).mkString}")
         .mkString("[", "; ", "]")
 
+  case class Weighted[T](nodes: List[T], _weight: (T, T) => Double) extends Graph[T]:
+    override def edges: List[Edge[T]] = {
+      for
+        node1 <- nodes
+        node2 <- nodes
+      yield
+        Edge.Weighted(node1, node2, weight(node1, node2))
+    }
+
+    override def outgoing(node: T): List[Edge[T]] = {
+      for
+        node2 <- nodes
+        if weight(node, node2) < Double.PositiveInfinity
+      yield
+        Edge.Weighted(node, node2, weight(node, node2))
+    }
+
+    override def incoming(node: T): List[Edge[T]] = {
+      for
+        node1 <- nodes
+        if weight(node1, node) < Double.PositiveInfinity
+      yield
+        Edge.Weighted(node1, node, weight(node1, node))
+    }
+
+    override def weight(node1: T, node2: T): Double = _weight(node1, node2)
+    
 object GraphDemo:
   // Example 1
   val demo1 = Graph.Pairs(
@@ -106,6 +175,8 @@ object GraphDemo:
   println(demo3.asPairs)
   println(demo3.asAdjList)
   println(demo3)
+
+  // TODO add demos for Edges and Weighted
 
 import doodle.core.*
 import doodle.image.*

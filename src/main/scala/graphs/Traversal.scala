@@ -22,29 +22,23 @@ object Traversal:
     var visited: List[T] = Nil
     var tree: List[(T, T)] = Nil
 
-    def getUnvisited: List[T] = {
-      g.nodes.filter(node => !visited.contains(node))
-    }
+    for start <- g.nodes do
+      if !visited.contains(start) then
+        stack.push(Visit(start))
 
-    var unvisited = getUnvisited
-    while unvisited.nonEmpty do
-      stack.push(Visit(unvisited.head))
+        while stack.nonEmpty do
+          stack.pop() match
+            case Visit(node) =>
+              for node2 <- g.neighbors(node) do
+                stack.push(Edge(node, node2))
+              visited = node :: visited
 
-      while stack.nonEmpty do
-        stack.pop() match
-          case Visit(node) =>
-            for node2 <- g.neighbors(node) do
-              stack.push(Edge(node, node2))
-            visited = node :: visited
-
-          case Edge(node1, node2) =>
-            if !visited.contains(node2) then
-              tree = (node1, node2) :: tree
-              stack.push(Visit(node2))
-      end while
-
-      unvisited = getUnvisited
-    end while
+            case Edge(node1, node2) =>
+              if !visited.contains(node2) then
+                tree = (node1, node2) :: tree
+                stack.push(Visit(node2))
+        end while
+    end for
     
     Graph.Pairs(g.nodes, tree)
   }
