@@ -2,8 +2,8 @@ package graphs
 
 object Traversal:
   enum StackItem[T]:
-    case Visit(node: T)
-    case Edge(node1: T, node2: T)
+    case VisitNode(node: T)
+    case VisitEdge(edge: Edge[T])
 
   /**
     * Perform a depth-first search of a graph and return
@@ -20,27 +20,27 @@ object Traversal:
     val stack: Stack[StackItem[T]] = Stack.empty
 
     var visited: List[T] = Nil
-    var tree: List[(T, T)] = Nil
+    var tree: List[Edge[T]] = Nil
 
     for start <- g.nodes do
       if !visited.contains(start) then
-        stack.push(Visit(start))
+        stack.push(VisitNode(start))
 
         while stack.nonEmpty do
           stack.pop() match
-            case Visit(node) =>
-              for node2 <- g.neighbors(node) do
-                stack.push(Edge(node, node2))
+            case VisitNode(node) =>
+              for edge <- g.outgoing(node) do
+                stack.push(VisitEdge(edge))
               visited = node :: visited
 
-            case Edge(node1, node2) =>
-              if !visited.contains(node2) then
-                tree = (node1, node2) :: tree
-                stack.push(Visit(node2))
+            case VisitEdge(edge) =>
+              if !visited.contains(edge.to) then
+                tree = edge :: tree
+                stack.push(VisitNode(edge.to))
         end while
     end for
     
-    Graph.Pairs(g.nodes, tree)
+    Graph.Edges(g.nodes, tree)
   }
 
   @main def traverse() = {
