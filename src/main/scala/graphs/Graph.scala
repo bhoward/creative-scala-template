@@ -27,7 +27,6 @@ trait Graph[T]:
   def asAdjList = Graph.AdjList(nodes, neighbors)
   def asAdjMatrix = Graph.AdjMatrix(nodes, adjacent)
   def asWeighted = Graph.Weighted(nodes, weight)
-  // TODO add asOutList and asInList?
 
 object Graph:
   case class Edges[T](nodes: List[T], edges: List[Edge[T]]) extends Graph[T]:
@@ -109,6 +108,7 @@ object Graph:
       for
         node1 <- nodes
         node2 <- nodes
+        if weight(node1, node2) < Double.PositiveInfinity
       yield
         Edge.Weighted(node1, node2, weight(node1, node2))
     }
@@ -176,7 +176,16 @@ object GraphDemo:
   println(demo3.asAdjList)
   println(demo3)
 
-  // TODO add demos for Edges and Weighted
+  // Example 4
+  val demo4 = Graph.Weighted(
+    (1 to 12).toList,
+    (a, b) => if b % a == 0 then 1 else Double.PositiveInfinity
+  )
+
+  println(demo4.asEdges)
+  println(demo4.asPairs)
+  println(demo4.asAdjList)
+  println(demo4.asAdjMatrix)
 
 import doodle.core.*
 import doodle.image.*
@@ -285,4 +294,6 @@ def showGraph[T](
     case "green" => Color.green
     case _ => Color.white
   showGraph(demo3, new CircleNodeLayout(demo3.nodes, 50), new ColoredNodeImage(40, nodeColor)).draw()
+
+  showGraph(demo4, new CircleNodeLayout(demo4.nodes, 100), new DefaultNodeImage(20)).draw()
 }
