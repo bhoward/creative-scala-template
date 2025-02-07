@@ -1,7 +1,7 @@
 package graphs
 
 object Traversal:
-  enum StackItem[T]:
+  enum Visit[T]:
     case VisitNode(node: T)
     case VisitEdge(edge: Edge[T])
 
@@ -15,9 +15,9 @@ object Traversal:
     */
   def depthFirst[T](g: Graph[T]): Graph[T] = {
     import scala.collection.mutable.Stack
-    import StackItem.*
+    import Visit.*
 
-    val stack: Stack[StackItem[T]] = Stack.empty
+    val stack: Stack[Visit[T]] = Stack.empty
 
     var visited: List[T] = Nil
     var tree: List[Edge[T]] = Nil
