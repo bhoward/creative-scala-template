@@ -1,4 +1,4 @@
-scalaVersion := "3.4.2"
+scalaVersion := "3.6.3"
 
 console / initialCommands := """
       |import doodle.core.*
@@ -11,7 +11,7 @@ console / initialCommands := """
     """.trim.stripMargin
 
 libraryDependencies ++= Seq(
-  "org.creativescala" %% "doodle" % "0.23.0",
+  "org.creativescala" %% "doodle" % "0.27.0",
   "org.scalatest" %% "scalatest" % "3.2.19" % "test",
-  "org.scalacheck" % "scalacheck_3" % "1.18.0"
+  "org.scalacheck" % "scalacheck_3" % "1.18.1"
 )
