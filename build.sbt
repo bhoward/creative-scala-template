@@ -13,5 +13,5 @@ console / initialCommands := """
 libraryDependencies ++= Seq(
   "org.creativescala" %% "doodle" % "0.27.0",
   "org.scalatest" %% "scalatest" % "3.2.19" % "test",
-  "org.scalacheck" % "scalacheck_3" % "1.18.1"
+  "org.scalatestplus" %% "scalacheck-1-18" % "3.2.19.0" % "test"
 )
