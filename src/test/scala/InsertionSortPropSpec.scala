@@ -1,6 +1,5 @@
 import org.scalatest.flatspec._
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import org.scalacheck.Prop.forAll
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks.forAll
 
 class InsertionSortPropSpec extends AnyFlatSpec:
   "Insertion Sort" should "preserve the list length" in {
