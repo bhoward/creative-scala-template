@@ -1,10 +1,6 @@
 package graphs
 
 object Traversal:
-  enum Visit[T]:
-    case VisitNode(node: T)
-    case VisitEdge(edge: Edge[T])
-
   /**
     * Perform a depth-first search of a graph and return
     * the dfs tree (as a graph) showing the edges followed.
@@ -15,28 +11,27 @@ object Traversal:
     */
   def depthFirst[T](g: Graph[T]): Graph[T] = {
     import scala.collection.mutable.Stack
-    import Visit.*
 
-    val stack: Stack[Visit[T]] = Stack.empty
+    val stack: Stack[Edge[T]] = Stack.empty
 
     var visited: List[T] = Nil
     var tree: List[Edge[T]] = Nil
 
+    def visit(node: T): Unit = {
+      visited = node :: visited
+      for edge <- g.outgoing(node) do
+        stack.push(edge)
+    }
+
     for start <- g.nodes do
       if !visited.contains(start) then
-        stack.push(VisitNode(start))
+        visit(start)
 
         while stack.nonEmpty do
-          stack.pop() match
-            case VisitNode(node) =>
-              for edge <- g.outgoing(node) do
-                stack.push(VisitEdge(edge))
-              visited = node :: visited
-
-            case VisitEdge(edge) =>
-              if !visited.contains(edge.to) then
-                tree = edge :: tree
-                stack.push(VisitNode(edge.to))
+          val edge = stack.pop()
+          if !visited.contains(edge.to) then
+            tree = edge :: tree
+            visit(edge.to)
         end while
     end for
     

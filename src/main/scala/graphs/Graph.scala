@@ -179,7 +179,7 @@ object GraphDemo:
   // Example 4
   val demo4 = Graph.Weighted(
     (1 to 12).toList,
-    (a, b) => if b % a == 0 then 1 else Double.PositiveInfinity
+    (a, b) => if b % a == 0 then b / a else Double.PositiveInfinity
   )
 
   println(demo4.asEdges)
