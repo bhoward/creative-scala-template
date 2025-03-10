@@ -99,5 +99,5 @@ def time[T](body: => T): (Double, T) = {
     else
         println("Skipping version 2")
     println("3: " + time(maxSubarray3(data)))
-    println("4: " + time(maxSubarray3(data)))
+    println("4: " + time(maxSubarray4(data)))
 }
