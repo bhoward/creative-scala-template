@@ -69,10 +69,11 @@ object version1LIS {
   @main
   def lisDemo(): Unit = {
     val input = List(3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5, 8)
-    println(s"v1(12): ${version1(input)}")
-    println(s"v2(12): ${version2(input.toArray)}")
-    println(s"v3(12): ${version3(input.toArray)}")
-    println(s"v4(12): ${version4(input.toArray)}")
+    val n = input.length
+    println(s"v1($n): ${version1(input)}")
+    println(s"v2($n): ${version2(input.toArray)}")
+    println(s"v3($n): ${version3(input.toArray)}")
+    println(s"v4($n): ${version4(input.toArray)}")
 
     val n1 = 100
     val longInput = Seq.fill(n1)(scala.util.Random.nextInt)
