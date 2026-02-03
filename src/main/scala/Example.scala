@@ -5,6 +5,7 @@ import doodle.image.syntax.core.*
 import doodle.core.font.*
 import doodle.java2d.*
 import doodle.reactor.*
+import doodle.reactor.syntax.all.*
 import scala.concurrent.duration.*
 import cats.effect.unsafe.implicits.global
 
@@ -113,7 +114,7 @@ object Example {
     // image5.draw()
 
     // Comment out the above and uncomment the below to display the animation
-    // animation.run(frame)
+    // animation.animateWithFrame(frame)
 
     /*
     import doodle.image.Image.Elements.{Rectangle, Circle, Above, Beside}
