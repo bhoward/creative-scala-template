@@ -1,10 +1,27 @@
 package search
 
+/**
+ * An ImplicitGraph represents a graph-like structure on which we
+ * can search for goal nodes. The graph is not stored as a collection
+ * of explicit nodes in a data structure; rather, it is traversed one
+ * node at a time. Each node can be checked to see if it is a goal,
+ * and a list of neighboring nodes can be obtained. Note that this is
+ * not necessarily a list of all neighboring nodes, since we assume
+ * that some form of pruning has been applied to guide the traversal.
+ * In particular, since it may not be feasible to maintain a collection
+ * of visited nodes, we expect that the neighbors will only include
+ * unvisited nodes.
+ */
 trait ImplicitGraph:
   type Node
   def neighbors(n: Node): List[Node]
   def isGoal(n: Node): Boolean
 
+/**
+ * Depth-first search on an ImplicitGraph. Does no tracing of visited
+ * nodes, so it relies on an appropriate pruning strategy when listing
+ * neighbors of nodes.
+ */
 object DFS:
   def findOne(g: ImplicitGraph, start: g.Node): Option[g.Node] = {
     import scala.util.boundary, boundary.break // enable break from loop
@@ -34,6 +51,11 @@ object DFS:
     aux(start, Nil)
   }
 
+/**
+ * Example of searching for solutions to the 8 queens problem:
+ * put 8 queens on an 8x8 chessboard so that none of them
+ * attack each other (horizontally, vertically, or diagonally).
+ */
 object EightQueens extends ImplicitGraph:
   type Node = List[(Int, Int)]
 
