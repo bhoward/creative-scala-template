@@ -5,6 +5,7 @@ import doodle.image.syntax.core.*
 import doodle.core.font.*
 import doodle.java2d.*
 import doodle.reactor.*
+import doodle.reactor.syntax.all.*
 import scala.concurrent.duration.*
 import cats.effect.unsafe.implicits.global
 
@@ -113,6 +114,30 @@ object Example {
     // image5.draw()
 
     // Comment out the above and uncomment the below to display the animation
-    // animation.run(frame)
+    // animation.animateWithFrame(frame)
+
+    /*
+    import doodle.image.Image.Elements.{Rectangle, Circle, Above, Beside}
+
+    def width(image: Image): Double = image match {
+      case Circle(d) => d
+      case Rectangle(w, h) => w
+      case Above(u, d) => width(u) max width(d)
+      case Beside(l, r) => width(l) + width(r)
+      case _ => 0
+    }
+
+    def height(image: Image): Double = image match {
+      case Circle(d) => d
+      case Rectangle(w, h) => h
+      case Above(u, d) => height(u) + height(d)
+      case Beside(l, r) => height(l) max height(r)
+      case _ => 0
+    }
+
+    val demo = (Image.circle(100) `beside` Image.rectangle(200, 100)) `above` Image.rectangle(100, 100)
+    demo.draw()
+    println(s"width = ${width(demo)}, height = ${height(demo)}")
+    */
   }
 }
